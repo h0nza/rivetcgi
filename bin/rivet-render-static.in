@@ -1,0 +1,23 @@
+#! /usr/bin/env tclsh
+
+if {[catch {
+	package require tclrivet
+}]} {
+	lappend auto_path [file join [file dirname [file normalize [info script]]] .. packages]
+	package require tclrivet
+}
+
+set ::rivet::header_sent 1
+
+foreach file $argv {
+	if {[catch {
+		parse $file
+	}]} {
+		puts stderr "error: Failed to parse \"$file\": $::errorInfo"
+		exit 1
+	}
+}
+
+rivet_flush
+
+exit 0
